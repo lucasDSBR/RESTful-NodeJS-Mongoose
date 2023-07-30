@@ -1,0 +1,24 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const config = require('config');
+const consign = require('consign');
+module.exports = () => {
+	const app = express();
+	const serverPortConfig = config.get('server.port');
+
+	//SETANDO VARIAVEIS DA APLICAÃÃO
+	app.set('port', process.env.PORT || serverPortConfig);
+
+	//MIDDLEWARES
+	app.use(bodyParser.json());
+
+	//ENDPOINTS
+	consign({cwd: 'api'})
+	.then('data')
+	.then('controllers')
+	.then('routes')
+	.then('servers')
+	.then('repositories')
+	.into(app)
+	return app;
+}
